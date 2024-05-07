@@ -30,14 +30,10 @@ FILTER_SUFFIX = "_DeepFilterNet3.wav"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 
-def clear_gpu_cache():
-    if torch.cuda.is_available():
-        torch.cuda.empty_cache()
 
 
 def load_model(checkpoint_dir="model/", repo_id="capleaf/viXTTS", use_deepspeed=False):
     global XTTS_MODEL
-    clear_gpu_cache()
     os.makedirs(checkpoint_dir, exist_ok=True)
 
     required_files = ["model.pth", "config.json", "vocab.json", "speakers_xtts.pth"]
@@ -64,8 +60,6 @@ def load_model(checkpoint_dir="model/", repo_id="capleaf/viXTTS", use_deepspeed=
     XTTS_MODEL.load_checkpoint(
         config, checkpoint_dir=checkpoint_dir, use_deepspeed=use_deepspeed
     )
-    if torch.cuda.is_available():
-        XTTS_MODEL.cuda()
 
     print("Model Loaded!")
     yield "Model Loaded!"
